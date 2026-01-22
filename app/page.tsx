@@ -216,12 +216,8 @@ interface CategoryTabProps {
 function CategoryTab({ label, subLabel, $active, onClick }: CategoryTabProps) {
   return (
     <S.BadgeButton $active={$active} onClick={onClick}>
-      <span style={{ fontSize: "10px", fontWeight: 700 }}>{label}</span>
-      {subLabel && (
-        <span style={{ fontSize: "8px", opacity: 0.7, marginTop: "2px" }}>
-          {subLabel}
-        </span>
-      )}
+      <S.TabLabel $active={$active}>{subLabel || label}</S.TabLabel>
+      {subLabel && <S.TabSubLabel>{label}</S.TabSubLabel>}
     </S.BadgeButton>
   );
 }

@@ -5,7 +5,7 @@ export const Card = styled.div`
   background-color: #ffffff;
   transition: all 0.5s ease;
   cursor: pointer;
-  
+
   &:hover {
     img {
       transform: scale(1.05);
@@ -46,28 +46,58 @@ export const SoldOutBadge = styled.span`
 
 export const QuickAddButton = styled.button`
   position: absolute;
-  bottom: 1rem;
-  left: 1rem;
-  right: 1rem;
+  bottom: 0.75rem;
+  right: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   border: 1px solid #e4e4e7;
-  background-color: rgba(255, 255, 255, 0.95);
-  padding: 0.75rem 0;
-  font-size: 10px;
-  font-weight: 700;
+  background-color: #ffffff;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 9999px;
+  font-size: 0; /* Hide text on mobile */
   color: #09090b;
-  opacity: 0;
-  transform: translateY(0.5rem);
-  transition: all 0.3s ease;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  opacity: 1;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   cursor: pointer;
+  z-index: 5;
+
+  @media (min-width: 768px) {
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    padding: 0.75rem 0;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    opacity: 0;
+    transform: translateY(0.5rem);
+    background-color: rgba(255, 255, 255, 0.95);
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
 
   &:hover {
     background-color: #09090b;
     color: #ffffff;
+    border-color: #09090b;
+
+    @media (min-width: 768px) {
+      transform: translateY(0);
+    }
+  }
+
+  &:active {
+    transform: scale(0.9);
   }
 
   &:disabled {
@@ -75,8 +105,10 @@ export const QuickAddButton = styled.button`
   }
 
   ${Card}:hover & {
-    opacity: 1;
-    transform: translateY(0);
+    @media (min-width: 768px) {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 `;
 

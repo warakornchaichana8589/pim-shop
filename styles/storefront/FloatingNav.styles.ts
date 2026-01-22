@@ -3,26 +3,30 @@ import { motion } from "framer-motion";
 
 export const NavWrapper = styled.div`
   position: fixed;
-  bottom: 2.5rem;
+  bottom: 2rem;
   left: 50%;
   z-index: 50;
   transform: translateX(-50%);
+
+  @media (min-width: 768px) {
+    bottom: 2.5rem;
+  }
 `;
 
 export const Container = styled(motion.div)`
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.5rem; /* Balanced gap */
   border-radius: 9999px;
-  border: 1px solid rgba(244, 244, 245, 0.8);
-  background-color: rgba(255, 255, 255, 0.95);
-  padding: 0.5rem;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
-  backdrop-filter: blur(24px);
+  border: 1px solid rgba(244, 244, 245, 0.5);
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 0.5rem 0.75rem; /* More horizontal padding for pill shape */
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08); /* Soft floating shadow */
+  backdrop-filter: blur(16px);
 `;
 
 export const Divider = styled.div`
-  margin: 0 0.25rem;
+  margin: 0 0.5rem;
   height: 1.25rem;
   width: 1px;
   background-color: #f4f4f5;
@@ -31,12 +35,12 @@ export const Divider = styled.div`
 export const ItemButton = styled.button<{ $active?: boolean }>`
   position: relative;
   display: flex;
-  height: 2.5rem;
+  height: 2.5rem; /* Slightly smaller for tighter look */
   width: 2.5rem;
   align-items: center;
   justify-content: center;
   border-radius: 9999px;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.2);
   border: none;
   cursor: pointer;
   background-color: ${(props) => (props.$active ? "#09090b" : "transparent")};
@@ -51,6 +55,10 @@ export const ItemButton = styled.button<{ $active?: boolean }>`
       transform: scale(1) translateY(-10px);
       opacity: 1;
     }
+  }
+
+  svg {
+    stroke-width: 1.5;
   }
 `;
 

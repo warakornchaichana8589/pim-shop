@@ -8,6 +8,8 @@ import {
   User,
   LogOut,
   Package,
+  Menu,
+  X,
 } from "lucide-react";
 import { useSession, signOut } from "next-auth/react";
 import { AnimatePresence } from "framer-motion";
@@ -17,6 +19,7 @@ import { MenuItem } from "@/types/menu";
 import AuthModal from "@/components/storefront/AuthModal";
 import * as S from "@/styles/storefront/Navbar.styles";
 import * as AuthStyles from "@/styles/storefront/AuthModal.styles";
+import { usePathname } from "next/navigation";
 
 // ============================================================
 // Sub-Components
@@ -72,6 +75,8 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   // 🟢 Selector Optimization: Only trigger re-render when total count changes
   const cartCount = useCart((state) =>
@@ -91,6 +96,11 @@ export default function Navbar() {
   useEffect(() => {
     setActiveMenuId(initialActiveId);
   }, [initialActiveId]);
+
+  // 🟢 Close mobile menu on route change
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -144,6 +154,11 @@ export default function Navbar() {
       <S.Nav $isScrolled={isScrolled}>
         <S.NavContainer>
           <S.LeftSection>
+            <S.MobileMenuButton
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </S.MobileMenuButton>
             <Logo />
 
             <S.DesktopLinks>
@@ -220,6 +235,30 @@ export default function Navbar() {
             </S.CartButton>
           </S.RightSection>
         </S.NavContainer>
+
+        {/* Mobile Dropdown - Moved inside S.Nav for correct positioning */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <S.MobileDropdown
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+            >
+              {menuItems.map((item) => (
+                <S.MobileNavLink
+                  key={item.id}
+                  href={item.href}
+                  $active={activeMenuId === item.id}
+                  onClick={() => handleMenuClick(item.id)}
+                >
+                  <S.MobileLinkLabel>{item.label}</S.MobileLinkLabel>
+                  <S.MobileLinkSubLabel>{item.subLabel}</S.MobileLinkSubLabel>
+                </S.MobileNavLink>
+              ))}
+            </S.MobileDropdown>
+          )}
+        </AnimatePresence>
       </S.Nav>
 
       <AuthModal

@@ -21,7 +21,17 @@ export const HeroBackground = styled.div`
     content: "";
     position: absolute;
     inset: 0;
-    background-color: rgba(255, 255, 255, 0.1);
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0.4) 70%,
+      rgba(255, 255, 255, 0.8) 100%
+    );
+
+    @media (min-width: 768px) {
+      background-color: rgba(255, 255, 255, 0.1);
+      background-image: none;
+    }
   }
 `;
 

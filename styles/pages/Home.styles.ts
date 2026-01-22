@@ -27,15 +27,28 @@ export const SnapSectionCenter = styled(SnapSection)`
 
 export const CategoriesRow = styled.div`
   display: flex;
-  gap: 3rem;
+  gap: 1.5rem;
   overflow-x: auto;
-  padding: 3rem 2.5rem;
+  padding: 2rem 1.5rem;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+
+  @media (min-width: 768px) {
+    gap: 3rem;
+    padding: 3rem 2.5rem;
+  }
 
   &::-webkit-scrollbar {
     display: none;
   }
   -ms-overflow-style: none;
   scrollbar-width: none;
+
+  /* Ensure the last item has enough space */
+  &::after {
+    content: "";
+    flex: 0 0 1.5rem;
+  }
 `;
 
 export const BadgeButton = styled.button<{ $active?: boolean }>`
@@ -47,19 +60,42 @@ export const BadgeButton = styled.button<{ $active?: boolean }>`
   border: none;
   border-bottom: 2px solid
     ${(props) => (props.$active ? "#09090b" : "transparent")};
-  padding: 1rem 0.5rem;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: ${(props) => (props.$active ? "#09090b" : "#a1a1aa")};
+  padding: 0.75rem 0.25rem;
   transition: all 0.3s ease;
   cursor: pointer;
   background: none;
   gap: 2px;
 
   &:hover {
-    color: #09090b;
+    span:first-child {
+      color: #09090b;
+    }
+  }
+`;
+
+export const TabLabel = styled.span<{ $active?: boolean }>`
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: ${(props) => (props.$active ? "#09090b" : "#71717a")};
+  transition: color 0.3s ease;
+
+  @media (min-width: 768px) {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+  }
+`;
+
+export const TabSubLabel = styled.span`
+  font-size: 8px;
+  font-weight: 700;
+  color: #a1a1aa;
+  opacity: 0.6;
+  letter-spacing: 0.05em;
+
+  @media (min-width: 768px) {
+    font-size: 9px;
   }
 `;
 

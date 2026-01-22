@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 export const Nav = styled.nav<{ $isScrolled: boolean }>`
   position: fixed;
@@ -183,4 +184,97 @@ export const SkeletonLine = styled.div<{ $width?: string; $height?: string }>`
       background-position: -200% 0;
     }
   }
+`;
+
+export const MobileMenuButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #09090b;
+
+  @media (min-width: 1024px) {
+    display: none;
+  }
+`;
+
+export const MobileDropdown = styled(motion.div)`
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: #ffffff;
+  border-top: 1px solid #f4f4f5;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 0; /* Vertical padding only, let items handle horizontal */
+  z-index: 50;
+  overflow: hidden;
+
+  @media (min-width: 1024px) {
+    display: none;
+  }
+`;
+
+export const MobileNavLink = styled(Link)<{ $active?: boolean }>`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Left aligned */
+  padding: 1.5rem 2.5rem; /* Increased vertical padding (py-6) */
+  text-decoration: none;
+  transition: all 0.3s ease;
+  background-color: ${(props) => (props.$active ? "#fafafa" : "transparent")};
+
+  /* Very faint separator */
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 2.5rem;
+    right: 2.5rem;
+    height: 1px;
+    background-color: #f4f4f5;
+    opacity: 0.5;
+  }
+
+  &:last-child::after {
+    display: none;
+  }
+
+  /* Active indicator: thin vertical line */
+  ${(props) =>
+    props.$active &&
+    `
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 1rem;
+      bottom: 1rem;
+      width: 2px;
+      background-color: #09090b;
+    }
+  `}
+`;
+
+export const MobileLinkLabel = styled.span`
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.2em; /* Wide letter spacing */
+  text-transform: uppercase; /* Uppercase */
+  color: #09090b;
+  line-height: 1.2;
+`;
+
+export const MobileLinkSubLabel = styled.span`
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: #a1a1aa; /* Muted gray */
+  margin-top: 0.25rem;
 `;
