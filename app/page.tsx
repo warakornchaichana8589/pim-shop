@@ -1,8 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import Link from "next/link";
+import React, { useState, useMemo } from "react";
 import Navbar from "@/components/storefront/Navbar";
 import HeroSection from "@/components/storefront/Hero";
 import HorizontalCarousel from "@/components/storefront/HorizontalCarousel";
@@ -13,66 +12,6 @@ import { useMenu } from "@/lib/hooks/useMenu";
 import Image from "next/image";
 import * as S from "@/styles/pages/Home.styles";
 
-// Mock data for products
-const MOCK_PRODUCTS: Product[] = [
-  {
-    id: "1",
-    name: "Songkran Water Gun - Super Soaker",
-    description:
-      "High-pressure water blaster for the ultimate Songkran experience.",
-    price: 590,
-    image: "/PROD_01.webp",
-    stock: 4,
-    category: "Festive",
-  },
-  {
-    id: "2",
-    name: "Traditional Thai Floral Shirt",
-    description: "Premium cotton shirt with vibrant seasonal patterns.",
-    price: 350,
-    image: "/PROD_02.webp",
-    stock: 15,
-    category: "Apparel",
-  },
-  {
-    id: "3",
-    name: "Premium Water Shield Bag",
-    description:
-      "Keep your gadgets safe and dry with our triple-seal waterproof bag.",
-    price: 120,
-    image: "/PROD_03.webp",
-    stock: 0,
-    category: "Accessories",
-  },
-  {
-    id: "4",
-    name: "Festival Survival Kit",
-    description: "Everything you need in one set.",
-    price: 890,
-    image: "/PROD_04.webp",
-    stock: 8,
-    category: "Bundle",
-  },
-  {
-    id: "5",
-    name: "Traditional Thai Goggles",
-    description: "High-quality protective goggles for festive water play.",
-    price: 150,
-    image: "/PROD_05.webp",
-    stock: 25,
-    category: "Accessories",
-  },
-  {
-    id: "6",
-    name: "Seasonal Blind Box - Thai Edition",
-    description: "A surprise box containing exclusive seasonal collectibles.",
-    price: 450,
-    image: "/PROD_06.webp",
-    stock: 12,
-    category: "Blind Box",
-  },
-];
-
 export default function Home() {
   const [activeSection, setActiveSection] = useState(0);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
@@ -82,12 +21,29 @@ export default function Home() {
 
   const { data: products } = useQuery({
     queryKey: ["products"],
-    queryFn: async () => {
-      // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 800));
-      return MOCK_PRODUCTS;
+    queryFn: async (): Promise<Product[]> => {
+      const response = await fetch("/api/products");
+      if (!response.ok) throw new Error("Network response was not ok");
+      const result = await response.json();
+      return result.data;
     },
   });
+
+  // 🟢 Memoized Filtered Products: Filter products based on selected tab
+  const filteredNewArrivals = useMemo(() => {
+    if (!products) return [];
+    if (!activeCategory) return products.slice(0, 8);
+
+    return products
+      .filter((p) => {
+        // Find the menu item to get its category path
+        const menuItem = menuItems.find((m) => m.id === activeCategory);
+        if (!menuItem) return false;
+        const category = menuItem.href.split("/").pop();
+        return p.category === category;
+      })
+      .slice(0, 8);
+  }, [products, activeCategory, menuItems]);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const scrollY = e.currentTarget.scrollTop;
@@ -121,32 +77,38 @@ export default function Home() {
           <HeroSection />
         </S.SnapSection>
 
-        {/* Section 1: Categories & New Arrivals */}
+        {/* Section 1: Categories & New Arrivals (Tabs) */}
         <S.SnapSectionCenter>
-          <S.CategoriesRow className="no-scrollbar">
-            <CategoryBadge
+          <div style={{ padding: "0 2.5rem", marginBottom: "1rem" }}>
+            <S.FeaturedSubTitle>Just In</S.FeaturedSubTitle>
+            <S.FeaturedTitle style={{ fontSize: "2rem" }}>
+              New Arrivals
+            </S.FeaturedTitle>
+          </div>
+
+          <S.CategoriesRow
+            className="no-scrollbar"
+            style={{ padding: "0 2.5rem 2rem" }}
+          >
+            <CategoryTab
               label="All"
               subLabel="ทั้งหมด"
-              href="/category"
               $active={activeCategory === null}
               onClick={() => setActiveCategory(null)}
             />
             {menuItems.map((item) => (
-              <CategoryBadge
+              <CategoryTab
                 key={item.id}
                 label={item.subLabel}
                 subLabel={item.label}
-                href={item.href}
                 $active={activeCategory === item.id}
                 onClick={() => setActiveCategory(item.id)}
               />
             ))}
           </S.CategoriesRow>
+
           <div style={{ padding: "0 1rem" }}>
-            <HorizontalCarousel
-              title="New Arrivals"
-              products={products?.slice(0, 4) || []}
-            />
+            <HorizontalCarousel title="" products={filteredNewArrivals} />
           </div>
         </S.SnapSectionCenter>
 
@@ -234,9 +196,6 @@ export default function Home() {
             onClick={() => scrollToSection(i)}
             className="indicator-item"
           >
-            <S.IndicatorLabel className="indicator-label">
-              {["Begin", "New", "Feature", "Must-Have", "About"][i]}
-            </S.IndicatorLabel>
             <S.IndicatorLine $active={activeSection === i} />
           </S.IndicatorButton>
         ))}
@@ -247,31 +206,22 @@ export default function Home() {
   );
 }
 
-interface CategoryBadgeProps {
+interface CategoryTabProps {
   label: string;
   subLabel?: string;
-  href: string;
   $active?: boolean;
   onClick?: () => void;
 }
 
-function CategoryBadge({
-  label,
-  subLabel,
-  href,
-  $active,
-  onClick,
-}: CategoryBadgeProps) {
+function CategoryTab({ label, subLabel, $active, onClick }: CategoryTabProps) {
   return (
-    <Link href={href} onClick={onClick} style={{ textDecoration: "none" }}>
-      <S.BadgeButton $active={$active}>
-        <span style={{ fontSize: "10px", fontWeight: 700 }}>{label}</span>
-        {subLabel && (
-          <span style={{ fontSize: "8px", opacity: 0.7, marginTop: "2px" }}>
-            {subLabel}
-          </span>
-        )}
-      </S.BadgeButton>
-    </Link>
+    <S.BadgeButton $active={$active} onClick={onClick}>
+      <span style={{ fontSize: "10px", fontWeight: 700 }}>{label}</span>
+      {subLabel && (
+        <span style={{ fontSize: "8px", opacity: 0.7, marginTop: "2px" }}>
+          {subLabel}
+        </span>
+      )}
+    </S.BadgeButton>
   );
 }

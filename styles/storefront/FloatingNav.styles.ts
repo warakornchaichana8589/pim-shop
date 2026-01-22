@@ -12,18 +12,18 @@ export const NavWrapper = styled.div`
 export const Container = styled(motion.div)`
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.5rem;
   border-radius: 9999px;
-  border: 1px solid #f4f4f5;
-  background-color: rgba(255, 255, 255, 0.9);
-  padding: 0.375rem;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(244, 244, 245, 0.8);
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 0.5rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
   backdrop-filter: blur(24px);
 `;
 
 export const Divider = styled.div`
-  margin: 0 0.5rem;
-  height: 1rem;
+  margin: 0 0.25rem;
+  height: 1.25rem;
   width: 1px;
   background-color: #f4f4f5;
 `;
@@ -31,24 +31,24 @@ export const Divider = styled.div`
 export const ItemButton = styled.button<{ $active?: boolean }>`
   position: relative;
   display: flex;
-  height: 2.75rem;
-  width: 2.75rem;
+  height: 2.5rem;
+  width: 2.5rem;
   align-items: center;
   justify-content: center;
   border-radius: 9999px;
-  transition: all 0.5s ease;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   border: none;
   cursor: pointer;
-  background-color: ${props => props.$active ? '#09090b' : 'transparent'};
-  color: ${props => props.$active ? '#ffffff' : '#a1a1aa'};
-  box-shadow: ${props => props.$active ? '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)' : 'none'};
+  background-color: ${(props) => (props.$active ? "#09090b" : "transparent")};
+  color: ${(props) => (props.$active ? "#ffffff" : "#71717a")};
 
   &:hover {
-    color: ${props => props.$active ? '#ffffff' : '#09090b'};
-    background-color: ${props => props.$active ? '#09090b' : '#fafafa'};
-    
+    color: #09090b;
+    background-color: ${(props) => (props.$active ? "#09090b" : "#f4f4f5")};
+    transform: translateY(-2px);
+
     .tooltip {
-      transform: scale(1);
+      transform: scale(1) translateY(-10px);
       opacity: 1;
     }
   }

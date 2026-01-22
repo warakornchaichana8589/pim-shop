@@ -186,50 +186,40 @@ export const SmallTitle = styled.h3`
 
 export const ScrollIndicatorWrapper = styled.div`
   position: fixed;
-  right: 2.5rem;
+  right: 1.5rem;
   top: 50%;
   z-index: 50;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
   transform: translateY(-50%);
+  align-items: center;
 `;
 
 export const IndicatorButton = styled.button`
   position: relative;
   display: flex;
+  justify-content: center;
   align-items: center;
-  justify-content: flex-end;
   background: none;
   border: none;
   cursor: pointer;
-
-  &:hover .indicator-label {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  padding: 0.5rem;
 `;
 
 export const IndicatorLabel = styled.span`
-  margin-right: 1.5rem;
-  opacity: 0;
-  transition: all 0.3s ease;
-  transform: translateX(1rem);
-  white-space: nowrap;
-  font-size: 9px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.3em;
-  color: #09090b;
+  display: none;
 `;
 
 export const IndicatorLine = styled.div<{ $active: boolean }>`
-  height: 1px;
-  transition: all 0.5s ease;
+  width: ${(props) => (props.$active ? "4px" : "6px")};
+  height: ${(props) => (props.$active ? "2rem" : "6px")};
+  border-radius: 9999px;
   background-color: ${(props) => (props.$active ? "#09090b" : "#e4e4e7")};
-  width: ${(props) => (props.$active ? "3rem" : "1.5rem")};
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
-  .indicator-item:hover & {
-    width: ${(props) => (props.$active ? "3rem" : "2rem")};
+  ${IndicatorButton}:hover & {
+    background-color: #09090b;
+    height: ${(props) => (props.$active ? "2rem" : "12px")};
   }
 `;

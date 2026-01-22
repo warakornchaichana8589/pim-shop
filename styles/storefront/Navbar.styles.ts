@@ -7,10 +7,12 @@ export const Nav = styled.nav<{ $isScrolled: boolean }>`
   z-index: 50;
   width: 100%;
   transition: all 0.5s ease;
-  padding: ${props => props.$isScrolled ? '0.75rem 0' : '1.5rem 0'};
-  background-color: ${props => props.$isScrolled ? 'rgba(255, 255, 255, 0.8)' : 'transparent'};
-  border-bottom: ${props => props.$isScrolled ? '1px solid #f4f4f5' : 'none'};
-  backdrop-filter: ${props => props.$isScrolled ? 'blur(12px)' : 'none'};
+  padding: ${(props) => (props.$isScrolled ? "0.75rem 0" : "1.5rem 0")};
+  background-color: ${(props) =>
+    props.$isScrolled ? "rgba(255, 255, 255, 0.8)" : "transparent"};
+  border-bottom: ${(props) =>
+    props.$isScrolled ? "1px solid #f4f4f5" : "none"};
+  backdrop-filter: ${(props) => (props.$isScrolled ? "blur(12px)" : "none")};
 `;
 
 export const NavContainer = styled.div`
@@ -43,7 +45,7 @@ export const LogoLink = styled(Link)`
   text-decoration: none;
 
   &:hover {
-    background-color: #E60012;
+    background-color: #e60012;
   }
 `;
 
@@ -76,7 +78,7 @@ export const StyledLink = styled(Link)<{ $active?: boolean }>`
   justify-content: center;
   transition: all 0.3s ease;
   text-decoration: none;
-  opacity: ${props => props.$active ? 1 : 0.4};
+  opacity: ${(props) => (props.$active ? 1 : 0.4)};
 
   &:hover {
     opacity: 1;
@@ -110,7 +112,7 @@ export const IconGroup = styled.div<{ $isScrolled: boolean }>`
   align-items: center;
   gap: 1.5rem;
   transition: color 0.5s ease;
-  color: ${props => props.$isScrolled ? '#a1a1aa' : '#71717a'};
+  color: ${(props) => (props.$isScrolled ? "#a1a1aa" : "#71717a")};
 
   @media (min-width: 768px) {
     display: flex;
@@ -151,7 +153,7 @@ export const Badge = styled.span`
   align-items: center;
   justify-content: center;
   border-radius: 9999px;
-  background-color: #E60012;
+  background-color: #09090b;
   font-size: 9px;
   font-weight: 700;
   color: #ffffff;
@@ -166,14 +168,9 @@ export const MenuSkeletonWrapper = styled.div`
 `;
 
 export const SkeletonLine = styled.div<{ $width?: string; $height?: string }>`
-  width: ${props => props.$width || '40px'};
-  height: ${props => props.$height || '12px'};
-  background: linear-gradient(
-    90deg,
-    #e5e5e5 25%,
-    #f0f0f0 50%,
-    #e5e5e5 75%
-  );
+  width: ${(props) => props.$width || "40px"};
+  height: ${(props) => props.$height || "12px"};
+  background: linear-gradient(90deg, #e5e5e5 25%, #f0f0f0 50%, #e5e5e5 75%);
   background-size: 200% 100%;
   border-radius: 4px;
   animation: shimmer 1.5s infinite;
@@ -187,4 +184,3 @@ export const SkeletonLine = styled.div<{ $width?: string; $height?: string }>`
     }
   }
 `;
-
