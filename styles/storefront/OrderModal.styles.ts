@@ -63,6 +63,25 @@ export const FormContainer = styled.form`
   padding: 2rem;
 `;
 
+export const UserInfoBadge = styled.div`
+  margin: 0 2rem;
+  padding: 0.75rem 1rem;
+  background-color: #fafafa;
+  border: 1px solid #e4e4e7;
+  font-size: 12px;
+  font-weight: 600;
+  color: #09090b;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &::before {
+    content: "✓";
+    color: #10b981;
+    font-weight: 700;
+  }
+`;
+
 export const FormFields = styled.div`
   margin-bottom: 2rem;
   display: flex;
@@ -180,8 +199,12 @@ export const StyledLoader = styled(Loader2)`
   color: #09090b;
 
   @keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
 `;
 

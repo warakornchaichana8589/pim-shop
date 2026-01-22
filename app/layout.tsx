@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Kanit } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
+import CartSystem from "@/components/storefront/CartSystem";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -21,15 +22,21 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   return (
     <html lang="en">
       <body
         className={`${inter.variable} ${kanit.variable} font-sans antialiased`}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          {modal}
+          <CartSystem />
+        </Providers>
       </body>
     </html>
   );

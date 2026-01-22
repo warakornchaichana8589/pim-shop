@@ -2,14 +2,14 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import Link from "next/link";
 import Navbar from "@/components/storefront/Navbar";
 import HeroSection from "@/components/storefront/Hero";
 import HorizontalCarousel from "@/components/storefront/HorizontalCarousel";
-import CartDrawer from "@/components/storefront/CartDrawer";
-import OrderModal from "@/components/storefront/OrderModal";
 import Footer from "@/components/storefront/Footer";
 import FloatingNav from "@/components/storefront/FloatingNav";
 import { Product } from "@/types";
+import { useMenu } from "@/lib/hooks/useMenu";
 import Image from "next/image";
 import * as S from "@/styles/pages/Home.styles";
 
@@ -18,9 +18,10 @@ const MOCK_PRODUCTS: Product[] = [
   {
     id: "1",
     name: "Songkran Water Gun - Super Soaker",
-    description: "High-pressure water blaster for the ultimate Songkran experience.",
+    description:
+      "High-pressure water blaster for the ultimate Songkran experience.",
     price: 590,
-    image: "https://images.unsplash.com/photo-1594165654523-a55e2e92a433?q=80&w=800&auto=format&fit=crop",
+    image: "/PROD_01.webp",
     stock: 4,
     category: "Festive",
   },
@@ -29,16 +30,17 @@ const MOCK_PRODUCTS: Product[] = [
     name: "Traditional Thai Floral Shirt",
     description: "Premium cotton shirt with vibrant seasonal patterns.",
     price: 350,
-    image: "https://images.unsplash.com/photo-1596755094514-9916342775d7?q=80&w=800&auto=format&fit=crop",
+    image: "/PROD_02.webp",
     stock: 15,
     category: "Apparel",
   },
   {
     id: "3",
     name: "Premium Water Shield Bag",
-    description: "Keep your gadgets safe and dry with our triple-seal waterproof bag.",
+    description:
+      "Keep your gadgets safe and dry with our triple-seal waterproof bag.",
     price: 120,
-    image: "https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=800&auto=format&fit=crop",
+    image: "/PROD_03.webp",
     stock: 0,
     category: "Accessories",
   },
@@ -47,7 +49,7 @@ const MOCK_PRODUCTS: Product[] = [
     name: "Festival Survival Kit",
     description: "Everything you need in one set.",
     price: 890,
-    image: "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=800&auto=format&fit=crop",
+    image: "/PROD_04.webp",
     stock: 8,
     category: "Bundle",
   },
@@ -56,7 +58,7 @@ const MOCK_PRODUCTS: Product[] = [
     name: "Traditional Thai Goggles",
     description: "High-quality protective goggles for festive water play.",
     price: 150,
-    image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=800&auto=format&fit=crop",
+    image: "/PROD_05.webp",
     stock: 25,
     category: "Accessories",
   },
@@ -65,16 +67,18 @@ const MOCK_PRODUCTS: Product[] = [
     name: "Seasonal Blind Box - Thai Edition",
     description: "A surprise box containing exclusive seasonal collectibles.",
     price: 450,
-    image: "https://images.unsplash.com/photo-1531746790731-6c087fecd05a?q=80&w=800&auto=format&fit=crop",
+    image: "/PROD_06.webp",
     stock: 12,
     category: "Blind Box",
   },
 ];
 
 export default function Home() {
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [activeSection, setActiveSection] = useState(0);
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+
+  // ดึง menu items จาก API (ใช้เป็น categories)
+  const { menuItems } = useMenu();
 
   const { data: products } = useQuery({
     queryKey: ["products"],
@@ -99,16 +103,16 @@ export default function Home() {
     if (container) {
       container.scrollTo({
         top: index * window.innerHeight,
-        behavior: "smooth"
+        behavior: "smooth",
       });
     }
   };
 
   return (
-    <div style={{ backgroundColor: '#ffffff' }}>
-      <Navbar onCartClick={() => setIsCartOpen(true)} />
-      
-      <S.MainWrapper 
+    <div style={{ backgroundColor: "#ffffff" }}>
+      <Navbar />
+
+      <S.MainWrapper
         className="snap-container no-scrollbar"
         onScroll={handleScroll}
       >
@@ -120,31 +124,45 @@ export default function Home() {
         {/* Section 1: Categories & New Arrivals */}
         <S.SnapSectionCenter>
           <S.CategoriesRow className="no-scrollbar">
-            <CategoryBadge label="All" $active />
-            <CategoryBadge label="Women" />
-            <CategoryBadge label="Men" />
-            <CategoryBadge label="Kids" />
-            <CategoryBadge label="Baby" />
-            <CategoryBadge label="Festive" />
+            <CategoryBadge
+              label="All"
+              subLabel="ทั้งหมด"
+              href="/category"
+              $active={activeCategory === null}
+              onClick={() => setActiveCategory(null)}
+            />
+            {menuItems.map((item) => (
+              <CategoryBadge
+                key={item.id}
+                label={item.subLabel}
+                subLabel={item.label}
+                href={item.href}
+                $active={activeCategory === item.id}
+                onClick={() => setActiveCategory(item.id)}
+              />
+            ))}
           </S.CategoriesRow>
-          <div style={{ padding: '0 1rem' }}>
-            <HorizontalCarousel title="New Arrivals" products={products?.slice(0, 4) || []} />
+          <div style={{ padding: "0 1rem" }}>
+            <HorizontalCarousel
+              title="New Arrivals"
+              products={products?.slice(0, 4) || []}
+            />
           </div>
         </S.SnapSectionCenter>
 
         {/* Section 2: Featured Bento Grid */}
-        <S.SnapSectionCenter style={{ padding: '0 2.5rem' }}>
+        <S.SnapSectionCenter style={{ padding: "0 2.5rem" }}>
           <S.FeaturedHeader>
             <S.FeaturedSubTitle>Curated Favorites</S.FeaturedSubTitle>
             <S.FeaturedTitle>Featured Highlights</S.FeaturedTitle>
           </S.FeaturedHeader>
-          
+
           <S.BentoGrid>
             <S.FeaturedBig className="group">
-              <Image 
-                src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=2070&auto=format&fit=crop" 
-                alt="Featured" 
-                fill 
+              <Image
+                src="/FEATURED_BIG.webp"
+                alt="Featured"
+                fill
                 className="object-cover transition-transform duration-1000 group-hover:scale-105"
               />
               <S.ImageOverlay />
@@ -155,10 +173,10 @@ export default function Home() {
             </S.FeaturedBig>
 
             <S.FeaturedWide className="group">
-               <Image 
-                src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070&auto=format&fit=crop" 
-                alt="Featured" 
-                fill 
+              <Image
+                src="/FEATURED_WIDE.webp"
+                alt="Featured"
+                fill
                 className="object-cover transition-transform duration-1000 group-hover:scale-105"
               />
               <S.ImageOverlay />
@@ -169,10 +187,10 @@ export default function Home() {
             </S.FeaturedWide>
 
             <S.FeaturedSmall className="group">
-              <Image 
-                src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=1920&auto=format&fit=crop" 
-                alt="Featured" 
-                fill 
+              <Image
+                src="/FEATURED_SMALL_1.webp"
+                alt="Featured"
+                fill
                 className="object-cover transition-transform duration-1000 group-hover:scale-105"
               />
               <S.FeaturedSmallLabelWrapper>
@@ -181,13 +199,13 @@ export default function Home() {
             </S.FeaturedSmall>
 
             <S.FeaturedSmall className="group">
-              <Image 
-                src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1920&auto=format&fit=crop" 
-                alt="Featured" 
-                fill 
+              <Image
+                src="/FEATURED_SMALL_2.webp"
+                alt="Featured"
+                fill
                 className="object-cover transition-transform duration-1000 group-hover:scale-105"
               />
-               <S.FeaturedSmallLabelWrapper>
+              <S.FeaturedSmallLabelWrapper>
                 <S.SmallTitle>New Knits</S.SmallTitle>
               </S.FeaturedSmallLabelWrapper>
             </S.FeaturedSmall>
@@ -195,8 +213,11 @@ export default function Home() {
         </S.SnapSectionCenter>
 
         {/* Section 3: Season Essentials */}
-        <S.SnapSectionCenter style={{ padding: '0 1rem' }}>
-          <HorizontalCarousel title="Season Essentials" products={products?.slice(3, 7) || []} />
+        <S.SnapSectionCenter style={{ padding: "0 1rem" }}>
+          <HorizontalCarousel
+            title="Season Essentials"
+            products={products?.slice(3, 7) || []}
+          />
         </S.SnapSectionCenter>
 
         {/* Section 4: Footer */}
@@ -208,8 +229,8 @@ export default function Home() {
       {/* Side Scroll Indicator */}
       <S.ScrollIndicatorWrapper>
         {[0, 1, 2, 3, 4].map((i) => (
-          <S.IndicatorButton 
-            key={i} 
+          <S.IndicatorButton
+            key={i}
             onClick={() => scrollToSection(i)}
             className="indicator-item"
           >
@@ -222,28 +243,35 @@ export default function Home() {
       </S.ScrollIndicatorWrapper>
 
       <FloatingNav />
-
-      {/* Overlays */}
-      <CartDrawer 
-        isOpen={isCartOpen} 
-        onClose={() => setIsCartOpen(false)} 
-        onCheckout={() => {
-          setIsCartOpen(false);
-          setIsCheckoutOpen(true);
-        }}
-      />
-      <OrderModal 
-        isOpen={isCheckoutOpen} 
-        onClose={() => setIsCheckoutOpen(false)} 
-      />
     </div>
   );
 }
 
-function CategoryBadge({ label, $active }: { label: string; $active?: boolean }) {
+interface CategoryBadgeProps {
+  label: string;
+  subLabel?: string;
+  href: string;
+  $active?: boolean;
+  onClick?: () => void;
+}
+
+function CategoryBadge({
+  label,
+  subLabel,
+  href,
+  $active,
+  onClick,
+}: CategoryBadgeProps) {
   return (
-    <S.BadgeButton $active={$active}>
-      {label}
-    </S.BadgeButton>
+    <Link href={href} onClick={onClick} style={{ textDecoration: "none" }}>
+      <S.BadgeButton $active={$active}>
+        <span style={{ fontSize: "10px", fontWeight: 700 }}>{label}</span>
+        {subLabel && (
+          <span style={{ fontSize: "8px", opacity: 0.7, marginTop: "2px" }}>
+            {subLabel}
+          </span>
+        )}
+      </S.BadgeButton>
+    </Link>
   );
 }

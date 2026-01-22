@@ -19,20 +19,23 @@ export default function CartDrawer({ isOpen, onClose, onCheckout }: CartDrawerPr
   return (
     <AnimatePresence>
       {isOpen && (
-        <>
-          <S.Overlay
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-          />
+        <S.Overlay
+          key="cart-overlay"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={onClose}
+        />
+      )}
 
-          <S.Drawer
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 30, stiffness: 300 }}
-          >
+      {isOpen && (
+        <S.Drawer
+          key="cart-drawer"
+          initial={{ x: "100%" }}
+          animate={{ x: 0 }}
+          exit={{ x: "100%" }}
+          transition={{ type: "spring", damping: 30, stiffness: 300 }}
+        >
             <S.Header>
               <S.HeaderTitleGroup>
                 <S.TitleWrapper>
@@ -116,7 +119,6 @@ export default function CartDrawer({ isOpen, onClose, onCheckout }: CartDrawerPr
               </S.Footer>
             )}
           </S.Drawer>
-        </>
       )}
     </AnimatePresence>
   );

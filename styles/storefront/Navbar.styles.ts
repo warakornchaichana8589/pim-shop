@@ -156,3 +156,35 @@ export const Badge = styled.span`
   font-weight: 700;
   color: #ffffff;
 `;
+
+// Skeleton Loading Styles
+export const MenuSkeletonWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+`;
+
+export const SkeletonLine = styled.div<{ $width?: string; $height?: string }>`
+  width: ${props => props.$width || '40px'};
+  height: ${props => props.$height || '12px'};
+  background: linear-gradient(
+    90deg,
+    #e5e5e5 25%,
+    #f0f0f0 50%,
+    #e5e5e5 75%
+  );
+  background-size: 200% 100%;
+  border-radius: 4px;
+  animation: shimmer 1.5s infinite;
+
+  @keyframes shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+`;
+

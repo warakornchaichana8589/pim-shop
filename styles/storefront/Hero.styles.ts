@@ -12,7 +12,7 @@ export const HeroBackground = styled.div`
   position: absolute;
   inset: 0;
   z-index: 0;
-  background-image: url('https://images.unsplash.com/photo-1574015974293-817f0efebb1b?q=80&w=2070&auto=format&fit=crop');
+  background-image: url('/HERO_BG.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

@@ -30,7 +30,7 @@ export const CategoriesRow = styled.div`
   gap: 3rem;
   overflow-x: auto;
   padding: 3rem 2.5rem;
-  
+
   &::-webkit-scrollbar {
     display: none;
   }
@@ -39,19 +39,24 @@ export const CategoriesRow = styled.div`
 `;
 
 export const BadgeButton = styled.button<{ $active?: boolean }>`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   white-space: nowrap;
   flex: none;
   border: none;
-  border-bottom: 2px solid ${props => props.$active ? '#09090b' : 'transparent'};
+  border-bottom: 2px solid
+    ${(props) => (props.$active ? "#09090b" : "transparent")};
   padding: 1rem 0.5rem;
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: ${props => props.$active ? '#09090b' : '#a1a1aa'};
+  color: ${(props) => (props.$active ? "#09090b" : "#a1a1aa")};
   transition: all 0.3s ease;
   cursor: pointer;
   background: none;
+  gap: 2px;
 
   &:hover {
     color: #09090b;
@@ -101,7 +106,7 @@ export const FeaturedBig = styled.div`
   position: relative;
   overflow: hidden;
   background-color: #fafafa;
-  
+
   @media (min-width: 768px) {
     grid-column: span 2;
     grid-row: span 2;
@@ -112,7 +117,7 @@ export const FeaturedWide = styled.div`
   position: relative;
   overflow: hidden;
   background-color: #fafafa;
-  
+
   @media (min-width: 768px) {
     grid-column: span 2;
   }
@@ -129,7 +134,7 @@ export const ImageOverlay = styled.div`
   inset: 0;
   background-color: rgba(255, 255, 255, 0.05);
   transition: background-color 0.3s ease;
-  
+
   .group:hover & {
     background-color: transparent;
   }
@@ -198,7 +203,7 @@ export const IndicatorButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
-  
+
   &:hover .indicator-label {
     opacity: 1;
     transform: translateX(0);
@@ -221,10 +226,10 @@ export const IndicatorLabel = styled.span`
 export const IndicatorLine = styled.div<{ $active: boolean }>`
   height: 1px;
   transition: all 0.5s ease;
-  background-color: ${props => props.$active ? '#09090b' : '#e4e4e7'};
-  width: ${props => props.$active ? '3rem' : '1.5rem'};
-  
+  background-color: ${(props) => (props.$active ? "#09090b" : "#e4e4e7")};
+  width: ${(props) => (props.$active ? "3rem" : "1.5rem")};
+
   .indicator-item:hover & {
-    width: ${props => props.$active ? '3rem' : '2rem'};
+    width: ${(props) => (props.$active ? "3rem" : "2rem")};
   }
 `;

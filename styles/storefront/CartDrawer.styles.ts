@@ -11,7 +11,8 @@ export const Overlay = styled(motion.div)`
 
 export const Drawer = styled(motion.div)`
   position: fixed;
-  inset-y: 0;
+  top: 0;
+  bottom: 0;
   right: 0;
   z-index: 70;
   display: flex;
